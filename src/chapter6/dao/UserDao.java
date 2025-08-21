@@ -112,7 +112,7 @@ public class UserDao {
           }
       }
 
-    //???
+    //ログインのtoUsersメソッド(L97)
     private List<User> toUsers(ResultSet rs) throws SQLException {
 
   	  log.info(new Object(){}.getClass().getEnclosingClass().getName() +
@@ -140,6 +140,7 @@ public class UserDao {
     }
 
     //setting
+    //名前とアカウント名の自動表示
     public User select(Connection connection, int id) {
 
     	    log.info(new Object(){}.getClass().getEnclosingClass().getName() +
@@ -171,7 +172,7 @@ public class UserDao {
     	        close(ps);
     	    }
     }
-
+    //情報更新
     public void update(Connection connection, User user) {
 
         log.info(new Object(){}.getClass().getEnclosingClass().getName() +
@@ -184,7 +185,9 @@ public class UserDao {
             sql.append("    account = ?, ");
             sql.append("    name = ?, ");
             sql.append("    email = ?, ");
-            sql.append("    password = ?, ");
+            if(!user.getPassword().isEmpty()) {
+            	sql.append("    password = ?, ");
+            }
             sql.append("    description = ?, ");
             sql.append("    updated_date = CURRENT_TIMESTAMP ");
             sql.append("WHERE id = ?");
@@ -194,9 +197,15 @@ public class UserDao {
             ps.setString(1, user.getAccount());
             ps.setString(2, user.getName());
             ps.setString(3, user.getEmail());
-            ps.setString(4, user.getPassword());
-            ps.setString(5, user.getDescription());
-            ps.setInt(6, user.getId());
+            if(!user.getPassword().isEmpty()) {
+            	ps.setString(4, user.getPassword());
+            	ps.setString(5, user.getDescription());
+                ps.setInt(6, user.getId());
+            } else {
+            	ps.setString(4, user.getDescription());
+                ps.setInt(5, user.getId());
+            }
+            //通し番号の抜けは×
 
             int count = ps.executeUpdate();
             if (count == 0) {

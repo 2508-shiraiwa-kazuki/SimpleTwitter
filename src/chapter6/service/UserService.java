@@ -58,6 +58,7 @@ public class UserService {
         }
     }
 
+    //ログイン
     public User select(String accountOrEmail, String password) {
 
   	  log.info(new Object(){}.getClass().getEnclosingClass().getName() +
@@ -86,6 +87,8 @@ public class UserService {
           }
     }
 
+    //設定変更
+    //名前とアカウント名を自動取得
     public User select(int userId) {
 
         log.info(new Object(){}.getClass().getEnclosingClass().getName() +
@@ -111,16 +114,21 @@ public class UserService {
         }
     }
 
+    //情報更新
     public void update(User user) {
 
         log.info(new Object(){}.getClass().getEnclosingClass().getName() +
         " : " + new Object(){}.getClass().getEnclosingMethod().getName());
 
         Connection connection = null;
+
         try {
             // パスワード暗号化
-            String encPassword = CipherUtil.encrypt(user.getPassword());
-            user.setPassword(encPassword);
+        	if(!user.getPassword().isEmpty()) {
+            	String encPassword = CipherUtil.encrypt(user.getPassword());
+            	user.setPassword(encPassword);
+        	}
+
 
             connection = getConnection();
             new UserDao().update(connection, user);

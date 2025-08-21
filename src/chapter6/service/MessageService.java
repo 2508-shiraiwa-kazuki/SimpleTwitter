@@ -31,7 +31,7 @@ public class MessageService {
         application.init();
 
     }
-
+    //つぶやきを登録
     public void insert(Message message) {
 
 	  log.info(new Object(){}.getClass().getEnclosingClass().getName() +
@@ -54,7 +54,7 @@ public class MessageService {
             close(connection);
         }
     }
-
+    //つぶやきを表示
     public List<UserMessage> select() {
 
   	  log.info(new Object(){}.getClass().getEnclosingClass().getName() +

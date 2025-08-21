@@ -31,7 +31,7 @@ public class UserMessageDao {
         application.init();
 
     }
-
+    //つぶやきを登録
     public List<UserMessage> select(Connection connection, int num) {
 
 	  log.info(new Object(){}.getClass().getEnclosingClass().getName() +
@@ -65,7 +65,7 @@ public class UserMessageDao {
             close(ps);
         }
     }
-
+    //つぶやきを表示
     private List<UserMessage> toUserMessages(ResultSet rs) throws SQLException {
 
 
