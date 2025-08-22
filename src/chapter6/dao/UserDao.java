@@ -35,6 +35,38 @@ public class UserDao {
         application.init();
 
     }
+
+    //アカウント名の重複確認
+    public User select(Connection connection, String account) {
+    	PreparedStatement ps = null;
+    	try {
+    		//同名アカウントの検索
+    		String sql = "SELECT * FROM users WHERE account = ? ";
+
+    		//文字列のみのためtoString()は不要
+    		ps = connection.prepareStatement(sql);
+
+    		//「?」の中身
+    		ps.setString(1, account);
+
+    		ResultSet rs = ps.executeQuery();
+
+    		//万が一の場合
+    		List<User> users = toUsers(rs);
+    		if(users.isEmpty()) {
+    			return null;
+    		} else if(2 <= users.size()) {
+    			throw new IllegalStateException("ユーザーが重複しています");
+            } else {
+                return users.get(0);
+    		}
+    	} catch (SQLException e) {
+    		throw new SQLRuntimeException(e);
+    	} finally {
+    		close(ps);
+    	}
+    }
+
     //ユーザー登録
     public void insert(Connection connection, User user) {
 

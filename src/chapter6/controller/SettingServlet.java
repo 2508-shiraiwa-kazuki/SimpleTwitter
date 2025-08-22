@@ -35,7 +35,6 @@ public class SettingServlet extends HttpServlet {
     public SettingServlet() {
         InitApplication application = InitApplication.getInstance();
         application.init();
-
     }
 
     @Override
@@ -80,7 +79,6 @@ public class SettingServlet extends HttpServlet {
             request.getRequestDispatcher("setting.jsp").forward(request, response);
             return;
         }
-
         session.setAttribute("loginUser", user);
         response.sendRedirect("./");
     }
@@ -119,6 +117,11 @@ public class SettingServlet extends HttpServlet {
         } else if (20 < account.length()) {
             errorMessages.add("アカウント名は20文字以下で入力してください");
         }
+        //アカウントが重複しているとき「すでに存在するアカウントです」と表示
+        if(new UserService().select(account) != null) {
+        	errorMessages.add("すでに存在するアカウントです");
+        }
+
         if (!StringUtils.isBlank(email) && (50 < email.length())) {
             errorMessages.add("メールアドレスは50文字以下で入力してください");
         }
