@@ -31,8 +31,8 @@ public class UserMessageDao {
         application.init();
 
     }
-    //つぶやきを登録
-    public List<UserMessage> select(Connection connection, int num) {
+    //つぶやき表示
+    public List<UserMessage> select(Connection connection, Integer id, int num) {
 
 	  log.info(new Object(){}.getClass().getEnclosingClass().getName() +
         " : " + new Object(){}.getClass().getEnclosingMethod().getName());
@@ -40,6 +40,7 @@ public class UserMessageDao {
         PreparedStatement ps = null;
         try {
             StringBuilder sql = new StringBuilder();
+            //SELECT → FROM・INNER JOIN・ON → WHERE → ORDER BY
             sql.append("SELECT ");
             sql.append("    messages.id as id, ");
             sql.append("    messages.text as text, ");
@@ -50,9 +51,18 @@ public class UserMessageDao {
             sql.append("FROM messages ");
             sql.append("INNER JOIN users ");
             sql.append("ON messages.user_id = users.id ");
+            //SQLインジェクション防止「?」、「?」の後ろは半角スペース必須
+            if(id != null) {
+            	sql.append("WHERE messages.user_id = ? ");
+            }
             sql.append("ORDER BY created_date DESC limit " + num);
 
             ps = connection.prepareStatement(sql.toString());
+
+            //「?」の中身
+            if(id != null) {
+            	ps.setInt(1,id);
+            }
 
             ResultSet rs = ps.executeQuery();
 
