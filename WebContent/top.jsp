@@ -56,6 +56,23 @@
 						</div>
            				<div class="text"><c:out value="${message.text}" /></div>
             			<div class="date"><fmt:formatDate value="${message.createdDate}" pattern="yyyy/MM/dd HH:mm:ss" /></div>
+
+						<!-- ログインかつ本人のみ編集削除が可能 -->
+						<c:if test="${ isShowMessageForm && message.userId == loginUser.id}">
+							<!-- つぶやきの削除 -->
+							<form action="deleteMessage" method="post">
+								<input type="hidden" name="id" value="${message.id}" id="id">
+		            			<input type="submit" value="削除" >
+        	    			</form>
+
+        	    			<!-- つぶやきの編集 -->
+        	    			<form action="edit" method="post">
+        	    				<a href="edit">
+        	    					<input type="hidden" name="id" value="${message.id}" id="id">
+        	    					<input type="submit" value="編集">
+        	    				</a>
+        	    			</form>
+						</c:if>
         			</div>
     			</c:forEach>
 			</div>
