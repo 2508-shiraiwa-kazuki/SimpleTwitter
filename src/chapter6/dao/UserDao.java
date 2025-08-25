@@ -51,12 +51,15 @@ public class UserDao {
 
     		ResultSet rs = ps.executeQuery();
 
-    		//万が一の場合
+
     		List<User> users = toUsers(rs);
+    		//既存DBに同名アカウントがないとき（新規登録）
     		if(users.isEmpty()) {
     			return null;
+        	//既存DBに同名アカウントがすでに2つ以上存在している場合（UNIQUEに設定しているため発生自体あり得ない）
     		} else if(2 <= users.size()) {
     			throw new IllegalStateException("ユーザーが重複しています");
+    		//既存DBに同名アカウントが1つしかないとき（設定更新）
             } else {
                 return users.get(0);
     		}

@@ -101,34 +101,36 @@ public class SettingServlet extends HttpServlet {
 
     private boolean isValid(User user, List<String> errorMessages) {
 
+    	log.info(new Object(){}.getClass().getEnclosingClass().getName() +
+    			" : " + new Object(){}.getClass().getEnclosingMethod().getName());
 
-	  log.info(new Object(){}.getClass().getEnclosingClass().getName() +
-        " : " + new Object(){}.getClass().getEnclosingMethod().getName());
+    	int id = user.getId();
+    	String name = user.getName();
+    	String account = user.getAccount();
+    	String email = user.getEmail();
+    	//アカウント重複チェック用
+    	User existAccount = new UserService().select(account);
 
-        String name = user.getName();
-        String account = user.getAccount();
-        String email = user.getEmail();
+    	if (!StringUtils.isBlank(name) && (20 < name.length())) {
+    		errorMessages.add("名前は20文字以下で入力してください");
+      	}
+    	if (StringUtils.isBlank(account)) {
+    		errorMessages.add("アカウント名を入力してください");
+      	} else if (20 < account.length()) {
+      		errorMessages.add("アカウント名は20文字以下で入力してください");
+      	}
+    	//アカウントが重複しているとき「すでに存在するアカウントです」と表示
+    	if(existAccount != null && existAccount.getId() != id) {
+    		errorMessages.add("すでに存在するアカウントです");
+    	}
 
-        if (!StringUtils.isBlank(name) && (20 < name.length())) {
-            errorMessages.add("名前は20文字以下で入力してください");
-        }
-        if (StringUtils.isBlank(account)) {
-            errorMessages.add("アカウント名を入力してください");
-        } else if (20 < account.length()) {
-            errorMessages.add("アカウント名は20文字以下で入力してください");
-        }
-        //アカウントが重複しているとき「すでに存在するアカウントです」と表示
-        if(new UserService().select(account) != null) {
-        	errorMessages.add("すでに存在するアカウントです");
-        }
+    	if (!StringUtils.isBlank(email) && (50 < email.length())) {
+    		errorMessages.add("メールアドレスは50文字以下で入力してください");
+      	}
 
-        if (!StringUtils.isBlank(email) && (50 < email.length())) {
-            errorMessages.add("メールアドレスは50文字以下で入力してください");
-        }
-
-        if (errorMessages.size() != 0) {
-            return false;
-        }
-        return true;
+    	if (errorMessages.size() != 0) {
+    		return false;
+      	}
+    	return true;
     }
 }
