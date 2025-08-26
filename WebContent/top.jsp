@@ -66,11 +66,9 @@
         	    			</form>
 
         	    			<!-- つぶやきの編集 -->
-        	    			<form action="edit" method="post">
-        	    				<a href="edit">
-        	    					<input type="hidden" name="id" value="${message.id}" id="id">
-        	    					<input type="submit" value="編集">
-        	    				</a>
+        	    			<form action="edit" method="get">
+        	    				<input type="hidden" name="id" value="${message.id}" id="id">
+        	    				<input type="submit" value="編集">
         	    			</form>
 						</c:if>
         			</div>
@@ -79,12 +77,12 @@
 
 			<div class="form-area">
    				<c:if test="${ isShowMessageForm }">
-        			<form action="message" method="post">
-            			いま、どうしてる？<br />
-            			<textarea name="text" cols="100" rows="5" class="tweet-box"></textarea>
-            			<br />
-            			<input type="submit" value="つぶやく">（140文字まで）
-        			</form>
+					<form action="message" method="post">
+						いま、どうしてる？<br />
+						<textarea name="text" cols="100" rows="5" class="tweet-box"></textarea>
+						<br />
+						<input type="submit" value="つぶやく">（140文字まで）
+					</form>
     			</c:if>
 			</div>
             <div class="copyright"> Copyright(c)ShiraiwaKazuki</div>

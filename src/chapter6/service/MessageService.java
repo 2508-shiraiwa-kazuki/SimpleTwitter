@@ -112,4 +112,64 @@ public class MessageService {
 			close(connection);
 		}
 	}
+
+    //つぶやきを表示（編集画面）
+    public Message select(int messageId) {
+
+    	 log.info(new Object(){}.getClass().getEnclosingClass().getName() +
+    		        " : " + new Object(){}.getClass().getEnclosingMethod().getName());
+
+    	Connection connection = null;
+    	try {
+    		connection = getConnection();
+    		Message message = new MessageDao().select(connection, messageId);
+    		commit(connection);
+
+    		return message;
+
+    	} catch (RuntimeException e) {
+    		rollback(connection);
+    		log.info(new Object(){}.getClass().getEnclosingClass().getName() +
+    			        " : " + new Object(){}.getClass().getEnclosingMethod().getName());
+    		throw e;
+
+    	} catch (Error e) {
+    		rollback(connection);
+    		log.info(new Object(){}.getClass().getEnclosingClass().getName() +
+    			        " : " + new Object(){}.getClass().getEnclosingMethod().getName());
+    		throw e;
+
+    	} finally {
+    		close(connection);
+    	}
+    }
+
+    //つぶやきを編集
+    public void update(String text, int messageId) {
+
+    	log.info(new Object(){}.getClass().getEnclosingClass().getName() +
+    			" : " + new Object(){}.getClass().getEnclosingMethod().getName());
+
+    	Connection connection = null;
+    	try {
+    		connection = getConnection();
+    		new MessageDao().update(connection, text, messageId);
+    		commit(connection);
+
+    	} catch (RuntimeException e) {
+    		rollback(connection);
+    		log.info(new Object(){}.getClass().getEnclosingClass().getName() +
+			        " : " + new Object(){}.getClass().getEnclosingMethod().getName());
+    		throw e;
+
+    	} catch (Error e) {
+    		rollback(connection);
+    		log.info(new Object(){}.getClass().getEnclosingClass().getName() +
+			        " : " + new Object(){}.getClass().getEnclosingMethod().getName());
+    		throw e;
+
+    	} finally {
+    		close(connection);
+    	}
+    }
 }

@@ -149,7 +149,7 @@ public class UserDao {
           }
       }
 
-    //ログインのtoUsersメソッド(L97)
+    //ログインのtoUsersメソッド
     private List<User> toUsers(ResultSet rs) throws SQLException {
 
   	  log.info(new Object(){}.getClass().getEnclosingClass().getName() +
