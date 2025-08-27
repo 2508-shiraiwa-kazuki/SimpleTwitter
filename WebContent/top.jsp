@@ -73,11 +73,21 @@
         	    				</form>
 							</c:if>
 						</div>
-
+						<!-- ログインかつ本人ではないつぶやきのみ返信可能 -->
+						<c:if test="${ loginUser.id != null && message.userId != loginUser.id}">
+							<!-- 返信フォーム -->
+							<form action="comment" method="post">
+								<div class="comment">
+									返信
+									<textarea name="comment-form" cols="100" rows="3" class="comment-form"></textarea><br />
+									<input type="hidden" name="id" value="${message.id}" id="id">
+									<input type="submit" value="返信">
+								</div>
+							</form>
+						</c:if>
         			</div>
     			</c:forEach>
 			</div>
-
 			<div class="form-area">
    				<c:if test="${ isShowMessageForm }">
 					<form action="message" method="post">
