@@ -18,33 +18,33 @@ import chapter6.logging.InitApplication;
 public class MessageDao {
 
 
-    /**
-    * ロガーインスタンスの生成
-    */
-    Logger log = Logger.getLogger("twitter");
+	/**
+	* ロガーインスタンスの生成
+	*/
+	Logger log = Logger.getLogger("twitter");
 
-    /**
-    * デフォルトコンストラクタ
-    * アプリケーションの初期化を実施する。
-    */
-    public MessageDao() {
-        InitApplication application = InitApplication.getInstance();
-        application.init();
+	/**
+	* デフォルトコンストラクタ
+	* アプリケーションの初期化を実施する。
+	*/
+	public MessageDao() {
+		InitApplication application = InitApplication.getInstance();
+		application.init();
 
-    }
+	}
 
-    //つぶやきを登録
+	//つぶやきを登録
     public void insert(Connection connection, Message message) {
 
-	  log.info(new Object(){}.getClass().getEnclosingClass().getName() +
-        " : " + new Object(){}.getClass().getEnclosingMethod().getName());
+    	log.info(new Object(){}.getClass().getEnclosingClass().getName() +
+			" : " + new Object(){}.getClass().getEnclosingMethod().getName());
 
-        PreparedStatement ps = null;
-        try {
-            StringBuilder sql = new StringBuilder();
-            sql.append("INSERT INTO messages ( ");
-            sql.append("    user_id, ");
-            sql.append("    text, ");
+    	PreparedStatement ps = null;
+    	try {
+    		StringBuilder sql = new StringBuilder();
+    		sql.append("INSERT INTO messages ( ");
+    		sql.append("    user_id, ");
+    		sql.append("    text, ");
             sql.append("    created_date, ");
             sql.append("    updated_date ");
             sql.append(") VALUES ( ");
@@ -60,42 +60,42 @@ public class MessageDao {
             ps.setString(2, message.getText());
 
             ps.executeUpdate();
-        } catch (SQLException e) {
+    	} catch (SQLException e) {
 		log.log(Level.SEVERE, new Object(){}.getClass().getEnclosingClass().getName() + " : " + e.toString(), e);
-            throw new SQLRuntimeException(e);
+			throw new SQLRuntimeException(e);
         } finally {
-            close(ps);
+        	close(ps);
         }
     }
 
-    //つぶやきを削除
+	//つぶやきを削除
     public void delete(Connection connection, int messageId) {
 
-  	  log.info(new Object(){}.getClass().getEnclosingClass().getName() +
-          " : " + new Object(){}.getClass().getEnclosingMethod().getName());
+    	log.info(new Object(){}.getClass().getEnclosingClass().getName() +
+    			" : " + new Object(){}.getClass().getEnclosingMethod().getName());
 
-  	  PreparedStatement ps = null;
-  	  try {
-  		  String sql = "DELETE FROM messages WHERE id = ? ";
+    	PreparedStatement ps = null;
+    	try {
+    		String sql = "DELETE FROM messages WHERE id = ? ";
 
-  		  ps = connection.prepareStatement(sql);
-  		  //?の中身
-  		  ps.setInt(1, messageId);
+    		ps = connection.prepareStatement(sql);
+    		//?の中身
+    		ps.setInt(1, messageId);
 
-  		  ps.executeUpdate();
+    		ps.executeUpdate();
 
-  	  } catch (SQLException e) {
-  		  throw new SQLRuntimeException(e);
-  	  } finally {
-  		  close(ps);
-  	  }
+    	} catch (SQLException e) {
+    		throw new SQLRuntimeException(e);
+    	} finally {
+    		close(ps);
+    	}
     }
 
-    //つぶやきを表示（編集画面）
+	//つぶやきを表示（編集画面）
     public Message select (Connection connection, int messageId) {
 
-	    log.info(new Object(){}.getClass().getEnclosingClass().getName() +
-	    " : " + new Object(){}.getClass().getEnclosingMethod().getName());
+    	log.info(new Object(){}.getClass().getEnclosingClass().getName() +
+    			" : " + new Object(){}.getClass().getEnclosingMethod().getName());
 
     	PreparedStatement ps = null;
     	try {
@@ -115,8 +115,8 @@ public class MessageDao {
     		}
 
     	} catch (SQLException e) {
-    	    log.info(new Object(){}.getClass().getEnclosingClass().getName() +
-    	    		" : " + new Object(){}.getClass().getEnclosingMethod().getName());
+    		log.info(new Object(){}.getClass().getEnclosingClass().getName() +
+    				" : " + new Object(){}.getClass().getEnclosingMethod().getName());
     		throw new SQLRuntimeException(e);
     	} finally {
     		close(ps);
