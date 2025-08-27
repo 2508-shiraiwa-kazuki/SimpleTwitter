@@ -124,19 +124,26 @@ public class MessageDao {
     }
 
     //つぶやきを編集
-    public void update(Connection connection,  String text, int messageId) {
+    public void update(Connection connection,  Message message) {
 
 	    log.info(new Object(){}.getClass().getEnclosingClass().getName() +
 	    " : " + new Object(){}.getClass().getEnclosingMethod().getName());
 
     	PreparedStatement ps = null;
     	try {
-    		String sql = "UPDATE messages SET text = ? WHERE id = ? ";
+    		//textとupdate_dateの2つを更新する
+    		StringBuilder sql = new StringBuilder();
 
-    		ps = connection.prepareStatement(sql);
+    		sql.append("UPDATE messages SET ");
+    		sql.append("	text = ?, ");
+    		sql.append("	updated_date = CURRENT_TIMESTAMP ");
+    		sql.append("WHERE id = ? ");
 
-    		ps.setString(1, text);
-    		ps.setInt(2, messageId);
+    		ps = connection.prepareStatement(sql.toString());
+
+    		//messageの中からtextとmessageIdを取得
+    		ps.setString(1, message.getText());
+    		ps.setInt(2, message.getId());
 
     		ps.executeUpdate();
 
