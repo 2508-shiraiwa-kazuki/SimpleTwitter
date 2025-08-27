@@ -55,22 +55,25 @@ public class EditServlet extends HttpServlet {
 		  //URLに数値以外が入力されたときのエラーメッセージ
 		  String id = request.getParameter("id");
 		  Message message = new Message();
-		  if((!StringUtils.isBlank(id)) && (id.matches("^[0-9]+$"))) {
+		  if(!StringUtils.isBlank(id) && id.matches("^[0-9]+$")) {
 			  int messageId = Integer.parseInt(request.getParameter("id"));
 		      message = new MessageService().select(messageId);
+		  } else {
+			  errorMessages.add("不正なパラメータが入力されました");
+	      	  session.setAttribute("errorMessages", errorMessages);
+	      	  response.sendRedirect("./");
+	      	  return;
 		  }
 
-	      //messageDao(つぶやき編集)でif(messages.isEmpty()) → return null としている
-	      if(message != null) {
-	    	  request.setAttribute("message", message);
-	    	  request.getRequestDispatcher("edit.jsp").forward(request, response);
+		  //messageDao(つぶやき編集)でif(messages.isEmpty()) → return null としている
+		  if(message != null) {
+			  request.setAttribute("message", message);
+			  request.getRequestDispatcher("edit.jsp").forward(request, response);
 	      } else {
 	      	  errorMessages.add("不正なパラメータが入力されました");
 	      	  session.setAttribute("errorMessages", errorMessages);
 	      	  response.sendRedirect("./");
 	      	  return;
-
-	      	  //1つめのif文でfalseだった場合messageはnullなので、2つめのif文のelseと重複する→両方判定できている
 	      }
    	    }
 
@@ -89,16 +92,16 @@ public class EditServlet extends HttpServlet {
 	    	int messageId = Integer.parseInt(request.getParameter("id"));
 
 	    	Message message = new Message();
-
+	    	message.setText(text);
+	    	message.setId(messageId);
 	    	if(!isValid(text, errorMessages)) {
 	    		session.setAttribute("errorMessages",  errorMessages);
 	    		session.setAttribute("message", message);
-	    		response.sendRedirect("edit.jsp");
+	    		request.getRequestDispatcher("edit.jsp").forward(request, response);
 	    		return;
 	    	}
 
-	    	message.setId(messageId);
-	    	message.setText(text);
+
 
 	    	new MessageService().update(message);
 	    	response.sendRedirect("./");
@@ -116,7 +119,7 @@ public class EditServlet extends HttpServlet {
 	            errorMessages.add("140文字以下で入力してください");
 	        }
 
-	    	//その他のエラーが発生した場合
+	    	//エラーが1つでも発生した場合
 	    	if (errorMessages.size() != 0) {
 	            return false;
 	        }
