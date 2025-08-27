@@ -58,24 +58,24 @@ public class EditServlet extends HttpServlet {
 		if(!StringUtils.isBlank(id) && id.matches("^[0-9]+$")) {
 			int messageId = Integer.parseInt(request.getParameter("id"));
 			message = new MessageService().select(messageId);
-		} else {
+			} else {
 				errorMessages.add("不正なパラメータが入力されました");
 				session.setAttribute("errorMessages", errorMessages);
 				response.sendRedirect("./");
 				return;
-		}
+			}
 
-		//messageDao(つぶやき編集)でif(messages.isEmpty()) → return null としている
-		//エラーメッセージはedit画面ではなくtop画面で表示させるためセッションに保持する
-		if(message == null) {
-			errorMessages.add("不正なパラメータが入力されました");
-			session.setAttribute("errorMessages", errorMessages);
-			response.sendRedirect("./");
-			return;
-		} else {
-			request.setAttribute("message", message);
-			request.getRequestDispatcher("edit.jsp").forward(request, response);
-		}
+			//messageDao(つぶやき編集)でif(messages.isEmpty()) → return null としている
+			//エラーメッセージはedit画面ではなくtop画面で表示させるためセッションに保持する
+			if(message == null) {
+				errorMessages.add("不正なパラメータが入力されました");
+				session.setAttribute("errorMessages", errorMessages);
+				response.sendRedirect("./");
+				return;
+			} else {
+				request.setAttribute("message", message);
+				request.getRequestDispatcher("edit.jsp").forward(request, response);
+			}
 	}
 
 	//つぶやきの編集
