@@ -102,8 +102,6 @@ public class EditServlet extends HttpServlet {
 			return;
 		}
 
-
-
 		new MessageService().update(message);
 		response.sendRedirect("./");
 
