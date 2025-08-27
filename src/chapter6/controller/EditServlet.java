@@ -47,28 +47,30 @@ public class EditServlet extends HttpServlet {
 		  HttpSession session = request.getSession();
 		  List<String> errorMessages = new ArrayList<String>();
 
+		  //if(  ){
+		  //	trueの処理
+		  //} else {
+		  //	falseの処理（エラーメッセージ）
+
 		  //URLに数値以外が入力されたときのエラーメッセージ
 		  String id = request.getParameter("id");
-		  if((id == null) || (!id.matches("^[0-9]+$"))) {
-			  errorMessages.add("不正なパラメータが入力されました");
-			  session.setAttribute("errorMessages", errorMessages);
-	    	  response.sendRedirect("./");
-	    	  return;
-	      }
+		  Message message = new Message();
+		  if((!StringUtils.isBlank(id)) && (id.matches("^[0-9]+$"))) {
+			  int messageId = Integer.parseInt(request.getParameter("id"));
+		      message = new MessageService().select(messageId);
+		  }
 
-	      int messageId = Integer.parseInt(request.getParameter("id"));
-	      Message message = new MessageService().select(messageId);
-
-	      //messageDaoでif(messages.isEmpty()) → return null としている
+	      //messageDao(つぶやき編集)でif(messages.isEmpty()) → return null としている
 	      if(message != null) {
 	    	  request.setAttribute("message", message);
-		      request.getRequestDispatcher("edit.jsp").forward(request, response);
-
+	    	  request.getRequestDispatcher("edit.jsp").forward(request, response);
 	      } else {
-	    	  errorMessages.add("不正なパラメータが入力されました");
-			  session.setAttribute("errorMessages", errorMessages);
-	    	  response.sendRedirect("./");
-	    	  return;
+	      	  errorMessages.add("不正なパラメータが入力されました");
+	      	  session.setAttribute("errorMessages", errorMessages);
+	      	  response.sendRedirect("./");
+	      	  return;
+
+	      	  //1つめのif文でfalseだった場合messageはnullなので、2つめのif文のelseと重複する→両方判定できている
 	      }
    	    }
 
@@ -87,8 +89,6 @@ public class EditServlet extends HttpServlet {
 	    	int messageId = Integer.parseInt(request.getParameter("id"));
 
 	    	Message message = new Message();
-	    	message.setId(messageId);
-	    	message.setText(text);
 
 	    	if(!isValid(text, errorMessages)) {
 	    		session.setAttribute("errorMessages",  errorMessages);
@@ -96,6 +96,9 @@ public class EditServlet extends HttpServlet {
 	    		response.sendRedirect("edit.jsp");
 	    		return;
 	    	}
+
+	    	message.setId(messageId);
+	    	message.setText(text);
 
 	    	new MessageService().update(message);
 	    	response.sendRedirect("./");
