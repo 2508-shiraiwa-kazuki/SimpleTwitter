@@ -42,19 +42,23 @@
 			</c:if>
 
 			<div class="messages">
-    			<c:forEach items="${messages}" var="message">
-					<div class="message">
+				<div class="message">
+	    			<c:forEach items="${messages}" var="message">
 						<div class="account-name">
+							<!-- アカウント名表示 -->
                 			<span class="account">
                 				<a href="./?user_id=<c:out value="${message.userId}"/>">
                 					<c:out value="${message.account}"/>
                 				</a>
                 			</span>
+                			<!-- ユーザー名表示 -->
                 			<span class="name">
                 				<c:out value="${message.name}" />
                 			</span>
 						</div>
+						<!-- つぶやき本文表示 -->
            				<div class="text"><c:out value="${message.text}" /></div>
+           				<!-- つぶやいた日時表示 -->
             			<div class="date"><fmt:formatDate value="${message.createdDate}" pattern="yyyy/MM/dd HH:mm:ss" /></div>
 
 						<div class="bottun">
@@ -73,20 +77,41 @@
         	    				</form>
 							</c:if>
 						</div>
+						<!-- 返信機能 -->
+						<div class="comments">
+							<c:forEach items="${comments}" var="comment">
+								<c:if test="${ comment.messageId == message.id }" >
+									<div class="account-name">
+										<!-- 返信したアカウント名表示 -->
+										<span class="account">
+											<c:out value="${comment.account}" />
+										</span>
+										<!-- 返信したユーザー名表示 -->
+										<span class="name">
+											<c:out value="${comment.name}" />
+										</span>
+									</div>
+									<!-- 返信表示 -->
+									<div class="message"><c:out value="${comment.text}" /></div>
+									<!-- 返信日時表示 -->
+									<div class="date"><c:out value="${comment.createdDate}" /></div>
+								</c:if>
+							</c:forEach>
+						</div>
 						<!-- ログインかつ本人ではないつぶやきのみ返信可能 -->
 						<c:if test="${ loginUser.id != null && message.userId != loginUser.id}">
 							<!-- 返信フォーム -->
 							<form action="comment" method="post">
-								<div class="comment">
+								<div class="comment-form">
 									返信
-									<textarea name="comment-form" cols="100" rows="3" class="comment-form"></textarea><br />
+									<textarea name="comment-text" cols="100" rows="3" class="comment-text"></textarea><br />
 									<input type="hidden" name="id" value="${message.id}" id="id">
 									<input type="submit" value="返信">
 								</div>
 							</form>
 						</c:if>
-        			</div>
-    			</c:forEach>
+        			</c:forEach>
+    			</div>
 			</div>
 			<div class="form-area">
    				<c:if test="${ isShowMessageForm }">

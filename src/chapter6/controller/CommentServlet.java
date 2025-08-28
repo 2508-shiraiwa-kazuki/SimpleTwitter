@@ -17,6 +17,7 @@ import org.apache.commons.lang.StringUtils;
 import chapter6.beans.Comment;
 import chapter6.beans.User;
 import chapter6.logging.InitApplication;
+import chapter6.service.CommentService;
 
 @WebServlet(urlPatterns = { "/comment" })
 
@@ -36,6 +37,7 @@ public class CommentServlet extends HttpServlet{
 		application.init();
     }
 
+	//コメントの登録
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -46,24 +48,26 @@ public class CommentServlet extends HttpServlet{
 		HttpSession session = request.getSession();
 		List<String> errorMessages = new ArrayList<String>();
 
-		String text = request.getParameter("text");
-		int messageId = Integer.parseInt(request.getParameter("id"));
+		String text = request.getParameter("comment-text");
 
-		Comment comment = new Comment();
-		comment.setText(text);
-		comment.setId(messageId);
-
+		//textの正誤判定
 		if(!isValid(text,errorMessages)) {
 			request.setAttribute("errorMessages",  errorMessages);
-			request.setAttribute("comment",  comment);
 			request.getRequestDispatcher("./").forward(request, response);
 			return;
 		}
 
+		int messageId = Integer.parseInt(request.getParameter("id"));
 		User user = (User) session.getAttribute("loginUser");
+
+		Comment comment = new Comment();
+		comment.setText(text);
+		comment.setId(messageId);
 		comment.setUserId(user.getId());
 
-		new CommentService.insert(comment);
+		new CommentService().insert(comment);
+
+		response.sendRedirect("./");
 
 
 	}

@@ -11,8 +11,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import chapter6.beans.User;
+import chapter6.beans.UserComment;
 import chapter6.beans.UserMessage;
 import chapter6.logging.InitApplication;
+import chapter6.service.CommentService;
 import chapter6.service.MessageService;
 
 
@@ -40,21 +42,26 @@ public class TopServlet extends HttpServlet {
             throws IOException, ServletException {
 
 
-	  log.info(new Object(){}.getClass().getEnclosingClass().getName() +
-        " : " + new Object(){}.getClass().getEnclosingMethod().getName());
+    	log.info(new Object(){}.getClass().getEnclosingClass().getName() +
+    			" : " + new Object(){}.getClass().getEnclosingMethod().getName());
 
-	  //フラグ管理（ログインしていればOn、ログオフならOff）
-	  boolean isShowMessageForm = false;
-      User user = (User) request.getSession().getAttribute("loginUser");
-      if (user != null) {
-          isShowMessageForm = true;
-      }
+    	//フラグ管理（ログインしていればOn、ログオフならOff）
+    	boolean isShowMessageForm = false;
+    	User user = (User) request.getSession().getAttribute("loginUser");
+    	if (user != null) {
+    		isShowMessageForm = true;
+    	}
 
-      String userId = request.getParameter("user_id");
-      List<UserMessage> messages = new MessageService().select(userId);
+    	//つぶやきの表示
+    	String userId = request.getParameter("user_id");
+    	List<UserMessage> messages = new MessageService().select(userId);
 
-      request.setAttribute("messages", messages);
-      request.setAttribute("isShowMessageForm", isShowMessageForm);
-      request.getRequestDispatcher("/top.jsp").forward(request, response);
+    	//返信表示
+   		List<UserComment> comments = new CommentService().select();
+
+   		request.setAttribute("messages", messages);
+   		request.setAttribute("comments", comments);
+   		request.setAttribute("isShowMessageForm", isShowMessageForm);
+   		request.getRequestDispatcher("/top.jsp").forward(request, response);
     }
 }
