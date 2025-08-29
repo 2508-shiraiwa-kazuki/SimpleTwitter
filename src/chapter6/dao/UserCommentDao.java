@@ -33,7 +33,7 @@ public class UserCommentDao {
     }
 
     //コメント表示
-    public List<UserComment> select(Connection connection){
+    public List<UserComment> select(Connection connection, int num){
 
     	log.info(new Object(){}.getClass().getEnclosingClass().getName() +
     			" : " + new Object(){}.getClass().getEnclosingMethod().getName());
@@ -52,7 +52,7 @@ public class UserCommentDao {
     		sql.append("FROM comments ");
     		sql.append("INNER JOIN users ");
     		sql.append("ON comments.user_id = users.id ");
-    		sql.append("ORDER BY created_date ASC ");
+    		sql.append("ORDER BY created_date ASC limit " + num);
 
     		ps = connection.prepareStatement(sql.toString());
 

@@ -83,19 +83,19 @@ public class MessageService {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			String nowTime = sdf.format(now);
 
-			if(!StringUtils.isEmpty(startDate)) {
+			if(!StringUtils.isBlank(startDate)) {
 				startDate += " 00:00:00";
 			} else {
 				startDate = "2020-01-01 00:00:00";
 			}
-			if(!StringUtils.isEmpty(endDate)) {
+			if(!StringUtils.isBlank(endDate)) {
 				endDate += " 23:59:59";
 			} else {
 				endDate = nowTime;
 			}
 
 			List<UserMessage> messages = new UserMessageDao().select(connection, id, LIMIT_NUM, startDate, endDate);
-			commit(connection);
+			//更新ではなく参照なのでコミット不要
 
 			return messages;
 		} catch (RuntimeException e) {

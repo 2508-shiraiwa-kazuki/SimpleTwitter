@@ -63,12 +63,14 @@ public class CommentService {
 		log.info(new Object(){}.getClass().getEnclosingClass().getName() +
 				" : " + new Object(){}.getClass().getEnclosingMethod().getName());
 
+		final int LIMIT_NUM = 1000;
+
 		Connection connection = null;
 		try {
 			connection = getConnection();
 
-			List<UserComment> comments = new UserCommentDao().select(connection);
-			commit(connection);
+			List<UserComment> comments = new UserCommentDao().select(connection, LIMIT_NUM);
+			//更新ではなく参照なのでコミット不要
 
 			return comments;
 		} catch (RuntimeException e) {
