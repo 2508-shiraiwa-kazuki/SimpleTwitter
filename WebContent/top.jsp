@@ -41,6 +41,30 @@
    				<c:remove var="errorMessages" scope="session" />
 			</c:if>
 
+			<!-- つぶやき投稿 -->
+			<div class="form-area">
+   				<c:if test="${ isShowMessageForm }">
+					<form action="message" method="post">
+						いま、どうしてる？<br />
+						<textarea name="text" cols="100" rows="5" class="tweet-box"></textarea>
+						<br>
+						<input type="submit" value="つぶやく">（140文字まで）
+					</form>
+    			</c:if>
+			</div><br>
+
+			<!-- つぶやきの絞り込み -->
+			<div class="filter">
+				【つぶやきフィルター】<br>
+				<form action="./" method="get">
+					<label for="start">開始日</label>
+						<input type="date" value="${start}" name="start">
+	    			<label for="end">～  終了日</label>
+	    				<input type="date" value="${end}" name="end">
+	    			<input type="submit" value="絞り込み">
+				</form>
+			</div>
+			<!-- つぶやき一覧 -->
 			<div class="messages">
 				<div class="message">
 	    			<c:forEach items="${messages}" var="message">
@@ -77,7 +101,7 @@
         	    				</form>
 							</c:if>
 						</div>
-						<!-- 返信機能 -->
+						<!-- 返信の表示 -->
 						<div class="comments">
 							<c:forEach items="${comments}" var="comment">
 								<c:if test="${ comment.messageId == message.id }" >
@@ -92,9 +116,9 @@
 										</span>
 									</div>
 									<!-- 返信表示 -->
-									<div class="message"><c:out value="${comment.text}" /></div>
+									<div class="comment"><c:out value="${comment.text}" /></div>
 									<!-- 返信日時表示 -->
-									<div class="date"><c:out value="${comment.createdDate}" /></div>
+									<div class="date"><fmt:formatDate value="${comment.createdDate}" pattern="yyyy/MM/dd HH:mm:ss" /></div>
 								</c:if>
 							</c:forEach>
 						</div>
@@ -112,16 +136,6 @@
 						</c:if>
         			</c:forEach>
     			</div>
-			</div>
-			<div class="form-area">
-   				<c:if test="${ isShowMessageForm }">
-					<form action="message" method="post">
-						いま、どうしてる？<br />
-						<textarea name="text" cols="100" rows="5" class="tweet-box"></textarea>
-						<br />
-						<input type="submit" value="つぶやく">（140文字まで）
-					</form>
-    			</c:if>
 			</div>
             <div class="copyright"> Copyright(c)ShiraiwaKazuki</div>
         </div>

@@ -19,14 +19,16 @@
                             <li><c:out value="${errorMessage}" />
                         </c:forEach>
                     </ul>
-                </div>
+				</div>
+				<!-- エラーメッセージをremoveする -->
+				<c:remove var="errorMessages" scope="session" />
             </c:if>
 
             <form action="login" method="post"><br />
-                <label for="accountOrEmail">アカウント名かメールアドレス</label>
+                <label for="accountOrEmail">アカウント名かメールアドレス</label><br />
                 <input name="accountOrEmail" id="accountOrEmail"/> <br />
 
-                <label for="password">パスワード</label>
+                <label for="password">パスワード</label><br />
                 <input name="password" type="password" id="password"/> <br />
 
                 <input type="submit" value="ログイン" /> <br />

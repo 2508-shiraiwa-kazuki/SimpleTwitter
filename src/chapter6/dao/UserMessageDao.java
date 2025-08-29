@@ -32,7 +32,7 @@ public class UserMessageDao {
 
     }
     //つぶやき表示
-    public List<UserMessage> select(Connection connection, Integer id, int num) {
+    public List<UserMessage> select(Connection connection, Integer id, int num, String startDate, String endDate) {
 
 	  log.info(new Object(){}.getClass().getEnclosingClass().getName() +
         " : " + new Object(){}.getClass().getEnclosingMethod().getName());
@@ -55,6 +55,10 @@ public class UserMessageDao {
             if(id != null) {
             	sql.append("WHERE messages.user_id = ? ");
             }
+
+            //つぶやきの絞り込み
+            sql.append("WHERE messages.created_date BETWEEN ? AND ?");
+
             sql.append("ORDER BY created_date DESC limit " + num);
 
             ps = connection.prepareStatement(sql.toString());
@@ -62,7 +66,12 @@ public class UserMessageDao {
             //「?」の中身
             if(id != null) {
             	ps.setInt(1,id);
+                ps.setString(2, startDate);
+                ps.setString(3, endDate);
             }
+
+            ps.setString(1, startDate);
+            ps.setString(2, endDate);
 
             ResultSet rs = ps.executeQuery();
 
@@ -75,7 +84,7 @@ public class UserMessageDao {
             close(ps);
         }
     }
-    //つぶやきを表示
+    //UserMessage.Beanに値を保持
     private List<UserMessage> toUserMessages(ResultSet rs) throws SQLException {
 
 

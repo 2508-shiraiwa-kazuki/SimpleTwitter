@@ -42,23 +42,29 @@ public class TopServlet extends HttpServlet {
             throws IOException, ServletException {
 
 
-    	log.info(new Object(){}.getClass().getEnclosingClass().getName() +
-    			" : " + new Object(){}.getClass().getEnclosingMethod().getName());
+		log.info(new Object(){}.getClass().getEnclosingClass().getName() +
+				" : " + new Object(){}.getClass().getEnclosingMethod().getName());
 
-    	//フラグ管理（ログインしていればOn、ログオフならOff）
-    	boolean isShowMessageForm = false;
+		//フラグ管理（ログインしていればOn、ログオフならOff）
+		boolean isShowMessageForm = false;
     	User user = (User) request.getSession().getAttribute("loginUser");
     	if (user != null) {
     		isShowMessageForm = true;
     	}
 
-    	//つぶやきの表示
+    	//つぶやきの表示＋絞り込みの日付
     	String userId = request.getParameter("user_id");
-    	List<UserMessage> messages = new MessageService().select(userId);
+    	String startDate = request.getParameter("start");
+    	String endDate = request.getParameter("end");
+
+    	List<UserMessage> messages = new MessageService().select(userId, startDate, endDate);
 
     	//返信表示
    		List<UserComment> comments = new CommentService().select();
 
+
+   		request.setAttribute("start", startDate);
+   		request.setAttribute("end", endDate);
    		request.setAttribute("messages", messages);
    		request.setAttribute("comments", comments);
    		request.setAttribute("isShowMessageForm", isShowMessageForm);

@@ -52,7 +52,7 @@ public class UserCommentDao {
     		sql.append("FROM comments ");
     		sql.append("INNER JOIN users ");
     		sql.append("ON comments.user_id = users.id ");
-    		sql.append("ORDER BY created_date DESC ");
+    		sql.append("ORDER BY created_date ASC ");
 
     		ps = connection.prepareStatement(sql.toString());
 
@@ -85,7 +85,7 @@ public class UserCommentDao {
     			comment.setMessageId(rs.getInt("message_id"));
     			comment.setAccount(rs.getString("account"));
     			comment.setName(rs.getString("name"));
-    			comment.setCreatedDate(rs.getDate("created_date"));
+    			comment.setCreatedDate(rs.getTimestamp("created_date"));
 
     			comments.add(comment);
     		}

@@ -52,8 +52,8 @@ public class CommentServlet extends HttpServlet{
 
 		//textの正誤判定
 		if(!isValid(text,errorMessages)) {
-			request.setAttribute("errorMessages",  errorMessages);
-			request.getRequestDispatcher("./").forward(request, response);
+			session.setAttribute("errorMessages", errorMessages);
+			response.sendRedirect("./");
 			return;
 		}
 
@@ -79,7 +79,7 @@ public class CommentServlet extends HttpServlet{
 
     	if(StringUtils.isBlank(text)) {
     		errorMessages.add("メッセージを入力して下さい");
-    	} else if (140 <= text.length()) {
+    	} else if (140 < text.length()) {
     		errorMessages.add("140文字以内で入力してください");
     	}
     	if(errorMessages.size() != 0) {
