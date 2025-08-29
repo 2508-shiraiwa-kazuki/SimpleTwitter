@@ -48,10 +48,10 @@ public class CommentServlet extends HttpServlet{
 		HttpSession session = request.getSession();
 		List<String> errorMessages = new ArrayList<String>();
 
-		String text = request.getParameter("comment-text");
+		String text = request.getParameter("comment_text");
 
 		//textの正誤判定
-		if(!isValid(text,errorMessages)) {
+		if(!isValid(text, errorMessages)) {
 			session.setAttribute("errorMessages", errorMessages);
 			response.sendRedirect("./");
 			return;

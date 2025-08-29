@@ -129,7 +129,7 @@
 							<form action="comment" method="post">
 								<div class="comment-form">
 									返信
-									<textarea name="comment-text" cols="100" rows="3" class="comment-text"></textarea><br />
+									<textarea name="comment_text" cols="100" rows="3" class="comment-text"></textarea><br />
 									<input type="hidden" name="id" value="${message.id}" id="id">
 									<input type="submit" value="返信">
 								</div>
