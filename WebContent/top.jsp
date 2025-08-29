@@ -117,7 +117,7 @@
 										</span>
 									</div>
 									<!-- 返信表示 -->
-									<div class="comment"><c:out value="${comment.text}" /></div>
+									<div class="text"><c:out value="${comment.text}" /></div>
 									<!-- 返信日時表示 -->
 									<div class="date"><fmt:formatDate value="${comment.createdDate}" pattern="yyyy/MM/dd HH:mm:ss" /></div>
 								</c:if>
