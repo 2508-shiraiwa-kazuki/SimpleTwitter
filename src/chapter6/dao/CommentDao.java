@@ -55,7 +55,7 @@ public class CommentDao {
 
 			ps.setString(1, comment.getText());
 			ps.setInt(2, comment.getUserId());
-			ps.setInt(3,  comment.getId());
+			ps.setInt(3, comment.getId());
 
 			ps.executeUpdate();
 
