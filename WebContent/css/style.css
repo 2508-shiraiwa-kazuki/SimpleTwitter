@@ -26,6 +26,7 @@ body {
 	margin-bottom: 0px;
 	margin-left: 0px;
 	margin-right: 0px;
+	resize: none;
 	width: 795px;
 	height: 56px;
 }
