@@ -82,7 +82,9 @@
                 			</span>
 						</div>
 						<!-- つぶやき本文表示 -->
-           				<div class="text"><c:out value="${message.text}" /></div>
+           				<div class="text">
+           					<pre><c:out value="${message.text}" /></pre>
+           				</div>
            				<!-- つぶやいた日時表示 -->
             			<div class="date"><fmt:formatDate value="${message.createdDate}" pattern="yyyy/MM/dd HH:mm:ss" /></div>
 
@@ -117,7 +119,9 @@
 										</span>
 									</div>
 									<!-- 返信表示 -->
-									<div class="text"><c:out value="${comment.text}" /></div>
+									<div class="text">
+										<pre><c:out value="${comment.text}" /></pre>
+									</div>
 									<!-- 返信日時表示 -->
 									<div class="date"><fmt:formatDate value="${comment.createdDate}" pattern="yyyy/MM/dd HH:mm:ss" /></div>
 								</c:if>

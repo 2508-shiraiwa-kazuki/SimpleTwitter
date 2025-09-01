@@ -52,14 +52,12 @@ public class UserMessageDao {
             sql.append("INNER JOIN users ");
             sql.append("ON messages.user_id = users.id ");
             sql.append("WHERE ");
-
             //SQLインジェクション防止「?」、「?」の後ろは半角スペース必須
+            //つぶやきの絞り込み
+            sql.append("	messages.created_date BETWEEN ? AND ? ");
+
             if(id != null) {
-            	 //つぶやきの絞り込み
-                sql.append("	messages.created_date BETWEEN ? AND ? ");
             	sql.append("	AND messages.user_id = ?  ");
-            } else {
-            	sql.append("	messages.created_date BETWEEN ? AND ? ");
             }
 
             sql.append("ORDER BY created_date DESC limit " + num);
@@ -71,7 +69,7 @@ public class UserMessageDao {
 
             //「?」の中身
             if(id != null) {
-            	ps.setInt(3,id);
+            	ps.setInt(3, id);
             }
 
 
